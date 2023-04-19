@@ -1,59 +1,82 @@
-const express = require('express');
-const session = require('express-session');
-const bcrypt = require('bcrypt');
+import React from "react";
+import "./index.css";
 
-const app = express();
+function App() {
+  return (
+    <div className="container">
+      {/* Header */}
+      <header>
+        <nav>
+          <a href="#">Home</a>
+          <a href="#">Features</a>
+          <a href="#">Pricing</a>
+          <a href="#">Contact</a>
+        </nav>
+        <img src="logo.png" alt="Logo" />
+      </header>
 
-// Set up session middleware
-app.use(session({
-  secret: 'my-secret-key',
-  resave: false,
-  saveUninitialized: true
-}));
+      {/* Main content */}
+      <main>
+        {/* Hero section */}
+        <section className="hero">
+          <h1>Welcome to our Product/Service</h1>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
+            fringilla metus vitae enim vehicula, ut cursus odio dictum.
+          </p>
+          <button>Get Started</button>
+        </section>
 
-// User model
-const users = [{
-  email: 'user@example.com',
-  password: '$2b$10$USj5P5oys/lzvHV8WJr3z.kwnlQOWPT/Ld61JYmBm.u0B90roXOeO' // hashed password
-}];
+        {/* Features section */}
+        <section className="features">
+          <div className="feature">
+            <img src="feature-1.png" alt="Feature 1" />
+            <h2>Feature 1</h2>
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
+              fringilla metus vitae enim vehicula, ut cursus odio dictum.
+            </p>
+          </div>
+          <div className="feature">
+            <img src="feature-2.png" alt="Feature 2" />
+            <h2>Feature 2</h2>
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
+              fringilla metus vitae enim vehicula, ut cursus odio dictum.
+            </p>
+          </div>
+          <div className="feature">
+            <img src="feature-3.png" alt="Feature 3" />
+            <h2>Feature 3</h2>
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
+              fringilla metus vitae enim vehicula, ut cursus odio dictum.
+            </p>
+          </div>
+        </section>
 
-// Login route
-app.post('/login', (req, res) => {
-  const { email, password } = req.body;
-  const user = users.find(user => user.email === email);
+        {/* Call-to-action section */}
+        <section className="cta">
+          <h2>Ready to get started?</h2>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
+            fringilla metus vitae enim vehicula, ut cursus odio dictum.
+          </p>
+          <button>Sign Up</button>
+        </section>
+      </main>
 
-  if (user && bcrypt.compareSync(password, user.password)) {
-    req.session.user = email;
-    res.redirect('/protected');
-  } else {
-    res.send('Invalid email or password');
-  }
-});
+      {/* Footer */}
+      <footer>
+        <nav>
+          <a href="#">About Us</a>
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+        </nav>
+        <p>&copy; 2023 Company Name. All rights reserved.</p>
+      </footer>
+    </div>
+  );
+}
 
-// Logout route
-app.get('/logout', (req, res) => {
-  req.session.destroy();
-  res.redirect('/login');
-});
-
-// Middleware to protect the route
-const requireLogin = (req, res, next) => {
-  if (req.session.user) {
-    next();
-  } else {
-    res.redirect('/login');
-  }
-};
-
-// Protected route
-app.get('/protected', requireLogin, (req, res) => {
-  const user = users.find(user => user.email === req.session.user);
-  res.send(`Welcome, ${user.email}! This is sensitive information.`);
-});
-
-// Start the server
-app.listen(3000, () => console.log('Server started on port 3000'));
-
-//app.listen(port, () => {
-//  console.log(`Example app listening at http://localhost:${port}`)
-//})
+export default App;
